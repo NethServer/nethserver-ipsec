@@ -1,0 +1,19 @@
+{
+    #
+    # 20authby
+    #
+
+    my $default = $conn->{'%default'};
+
+    if($ipsec{'AuthMode'} eq 'password') {
+	$default->{'authby'} = 'secret';
+    } elsif($ipsec{'AuthMode'} eq 'signature') {
+	$default->{'authby'} = 'rsasig';
+    } elsif($ipsec{'AuthMode'} eq 'password+signature') {
+	$default->{'authby'} = 'secret|rsasig';
+    } else {
+	$default->{'authby'} = 'never';
+    }
+
+    '';
+}

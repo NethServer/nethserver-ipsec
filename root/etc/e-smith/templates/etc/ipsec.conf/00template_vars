@@ -1,0 +1,39 @@
+{
+    #
+    # 00template_vars
+    #
+ 
+    use esmith::AccountsDB;   
+    use esmith::NetworksDB;
+    use esmith::util;
+
+    $networksDb = esmith::NetworksDB->open() || die("Could not open NetworksDB");
+    $accountsDb = esmith::AccountsDB->open() || die("Could not open AccountsDB");
+
+    $conn = {};
+
+    # Connection defaults, expanded to "conn %default" section
+    $conn->{'%default'} = {
+        'leftprotoport' => '17/%any',
+	'rightprotoport' => '17/%any',
+	'right' => '%any',
+	'type' => 'transport',
+	'ikelifetime' => '8h',
+	'keylife' => '1h',
+	'dpddelay' => '30',
+	'dpdtimeout' => '120',
+	'dpdaction' => 'clear',
+	'auto' => 'add'
+    };
+
+    @localNetworks = ();
+
+    foreach ($networksDb->green()) {
+	push @localNetworks, esmith::util::computeLocalNetworkShortSpec(
+	    $_->prop('ipaddr'), 
+	    $_->prop('netmask')
+	    );
+    }
+
+    '';
+}
