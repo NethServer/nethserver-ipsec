@@ -1,0 +1,10 @@
+{
+    #
+    # 00template_vars
+    #
+
+    # Default DNS servers -- this can be changed by nethserver-dnsmasq
+    @dnsServers = split(',', ($dns{NameServers} || ''), 2);
+
+    '';
+}

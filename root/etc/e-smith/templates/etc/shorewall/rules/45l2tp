@@ -1,0 +1,7 @@
+#
+# 40l2tp -- accept L2TP nego from ivpn zone
+#
+?COMMENT l2tp
+ACCEPT  ivpn	$FW	udp	1701
+
+

@@ -1,0 +1,6 @@
+#
+# 40ipsec zones
+#
+ivpn:net   ipsec
+lvpn       ipv4        dynamic_shared
+

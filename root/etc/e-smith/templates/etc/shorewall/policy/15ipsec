@@ -1,0 +1,10 @@
+#
+# 15ipsec policy
+#
+lvpn     loc     ACCEPT    
+loc	 lvpn	 ACCEPT    
+lvpn	 $FW	 ACCEPT    
+$FW	 lvpn	 ACCEPT
+$FW      ivpn    ACCEPT    
+loc      ivpn    ACCEPT
+ivpn     loc     ACCEPT

@@ -1,0 +1,5 @@
+#
+# 30rsa 
+#
+{ $ipsec{'KeyType'} eq 'rsa' ? '' : '# ' }: RSA "{ $ipsec{'KeyRsaName'} || join('.', $SystemName, $DomainName); }"
+

@@ -1,4 +1,4 @@
-Summary: NethServer L2TP/IPsec-based VPN configuration
+Summary: NethServer IPsec-based VPN configuration
 Name: nethserver-ipsec
 Version: @@VERSION@@
 Release: @@RELEASE@@
@@ -14,7 +14,7 @@ BuildRequires: perl
 BuildRequires: nethserver-devtools 
 
 %description
-Configures a VPN based on L2TP/IPsec protocols
+Configures a VPN based on IPsec protocol
 
 %prep
 %setup
@@ -25,7 +25,9 @@ perl createlinks
 %install
 rm -rf $RPM_BUILD_ROOT
 (cd root; find . -depth -print | cpio -dump $RPM_BUILD_ROOT)
-%{genfilelist} $RPM_BUILD_ROOT > %{name}-%{version}-filelist
+%{genfilelist} $RPM_BUILD_ROOT \
+   --file /etc/ipsec.d/nsspassword 'attr(0600,root,root)' \
+  > %{name}-%{version}-filelist
 echo "%doc COPYING" >> %{name}-%{version}-filelist
 
 %post

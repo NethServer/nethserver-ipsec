@@ -1,0 +1,4 @@
+NSS Certificate DB:{
+    use esmith::util;
+    $OUT = esmith::util::genRandomPassword('/etc/pki/nssdb/password');
+}

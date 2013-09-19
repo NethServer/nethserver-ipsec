@@ -1,0 +1,29 @@
+;
+; 10base
+;
+[global] 
+listen-addr = 0.0.0.0
+
+[lns default]
+ip range = { 
+    use esmith::util;
+
+    my $netmask = esmith::util::IPquadToAddr($ipsec{'L2tpNetmask'});
+    my $network = esmith::util::IPquadToAddr($ipsec{'L2tpNetwork'}) & $netmask;
+    my $broadcast = $network + (~$netmask);
+
+    $localIp = esmith::util::IPaddrToQuad($broadcast - 1);
+
+    join('-', 
+	 esmith::util::IPaddrToQuad($network + 1), 
+	 esmith::util::IPaddrToQuad($broadcast - 2), 	 
+	);
+}
+local ip = { $localIp }
+refuse pap = yes
+require authentication = yes
+ppp debug = yes
+pppoptfile = /etc/ppp/options.xl2tpd
+length bit = yes
+
+

@@ -1,0 +1,6 @@
+#
+# 50psk 
+#
+{ $ipsec{'KeyType'} eq 'psk' ? '' : '# ' }%any: PSK "{ $ipsec{'KeyPskSecret'} || '' }"
+
+

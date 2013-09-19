@@ -1,0 +1,34 @@
+{
+    #
+    # 20net2net
+    #
+    foreach my $account ($accountsDb->get_all_by_prop('type' => 'vpn'), $accountsDb->get_all_by_prop('type' => 'user')) {
+
+	my $remoteNetwork = $account->prop('VPNRemoteNetwork');
+	my $remoteNetmask = $account->prop('VPNRemoteNetmask');
+
+	if( ! $remoteNetwork || ! $remoteNetmask) {
+	    next;
+
+	} else {
+	    # Net2Net
+	    my $remoteSubnet = esmith::util::computeLocalNetworkShortSpec(
+		$remoteNetwork, 
+		$remoteNetmask
+		);
+
+	    $conn->{'N_' . $account->key} = {
+		'left' => '%defaultroute',
+		'leftsubnet' => $greenSubnet,
+		'leftsourceip' => $greenIp,
+		'rightid' => '@' . $account->key,
+		'right' => '%any',
+		'rightsubnet' => $remoteSubnet,
+		'auto' => 'add',
+	    };      
+	}
+
+    }
+    
+    '';
+}

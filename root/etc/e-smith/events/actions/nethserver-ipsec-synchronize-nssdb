@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/bin/bash
 
 #
 # Copyright (C) 2013 Nethesis S.r.l.
@@ -20,32 +20,6 @@
 # along with NethServer.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-use strict;
-use esmith::Build::CreateLinks  qw(:all);
+# Forward control to other action, passing /etc/ipsec.d as NSS DB path
+exec /etc/e-smith/events/actions/nethserver-base-synchronize-nssdb $1 /etc/ipsec.d
 
-#
-# Event nethserver-ipsec-update
-#
-event_actions('nethserver-ipsec-update', qw( 
-    initialize-default-databases 00
-    nethserver-ipsec-synchronize-nssdb 30
-));
-
-event_templates('nethserver-ipsec-update', qw(
-    /etc/ipsec.conf
-    /etc/ipsec.secrets
-    /etc/xl2tpd/xl2tpd.conf
-    /etc/ppp/options.xl2tpd
-    /etc/ipsec.d/nsspassword
-));
-
-event_services('nethserver-ipsec-update', qw(
-    ipsec restart
-    xl2tpd restart    
-    rsyslog restart
-));
-
-
-event_actions('certificate-update', qw(
-    nethserver-ipsec-synchronize-nssdb 30
-));
