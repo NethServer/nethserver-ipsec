@@ -20,6 +20,8 @@ namespace NethServer\Module\VPN;
  * along with NethServer.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+use Nethgui\System\NethPlatform as Validate;
+
 /**
  * TODO: add component description here
  *
@@ -28,5 +30,27 @@ namespace NethServer\Module\VPN;
  */
 class Ipsec extends \Nethgui\Controller\AbstractController
 {
-    
+    public function initialize()
+    {
+        parent::initialize();
+        $this->declareParameter('status', Validate::SERVICESTATUS, array(array('configuration', 'ipsec', 'status'), array('configuration', 'xl2tpd', 'status')));
+        $this->declareParameter('KeyType', $this->createValidator()->memberOf(array('rsa', 'psk')), array('configuration', 'ipsec', 'KeyType'));
+        $this->declareParameter('KeyPskSecret', Validate::NOTEMPTY, array('configuration', 'ipsec', 'KeyPskSecret'));
+        $this->declareParameter('L2tpNetwork', Validate::IPv4, array('configuration', 'ipsec', 'L2tpNetwork'));
+        $this->declareParameter('L2tpNetmask', Validate::IPv4_NETMASK, array('configuration', 'ipsec', 'L2tpNetmask'));
+    }
+
+    public function readStatus($ipsec, $xl2tpd)
+    {
+        return $ipsec;
+    }
+
+    public function writeStatus($status) {
+        return array($status, $status);
+    }
+
+    protected function onParametersSaved($changedParameters)
+    {
+        $this->getPlatform()->signalEvent('nethserver-ipsec-save');
+    }
 }

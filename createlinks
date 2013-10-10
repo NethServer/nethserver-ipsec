@@ -41,11 +41,29 @@ event_templates('nethserver-ipsec-update', qw(
 
 event_services('nethserver-ipsec-update', qw(
     ipsec restart
-    xl2tpd restart    
+    xl2tpd restart
     rsyslog restart
 ));
 
+#
+# Event nethserver-ipsec-save
+#
+event_templates('nethserver-ipsec-save', qw(
+    /etc/ipsec.conf
+    /etc/ipsec.secrets
+    /etc/xl2tpd/xl2tpd.conf
+    /etc/ppp/options.xl2tpd
+));
 
+event_services('nethserver-ipsec-save', qw(
+    ipsec restart
+    xl2tpd restart
+));
+
+
+#
+# Event certificate-update 
+#
 event_actions('certificate-update', qw(
     nethserver-ipsec-synchronize-nssdb 30
 ));
