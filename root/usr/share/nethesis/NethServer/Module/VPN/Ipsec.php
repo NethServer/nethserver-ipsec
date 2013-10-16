@@ -20,10 +20,10 @@ namespace NethServer\Module\VPN;
  * along with NethServer.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use Nethgui\System\NethPlatform as Validate;
+use Nethgui\System\PlatformInterface as Validate;
 
 /**
- * TODO: add component description here
+ * Common parameters for xl2tpd and IPsec daemons
  *
  * @author Davide Principi <davide.principi@nethesis.it>
  * @since 1.0
