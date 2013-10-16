@@ -29,6 +29,7 @@ use esmith::Build::CreateLinks  qw(:all);
 event_actions('nethserver-ipsec-update', qw( 
     initialize-default-databases 00
     nethserver-ipsec-synchronize-nssdb 30
+    firewall-adjust 40
 ));
 
 event_templates('nethserver-ipsec-update', qw(
@@ -60,6 +61,9 @@ event_services('nethserver-ipsec-save', qw(
     xl2tpd restart
 ));
 
+event_actions('nethserver-ipsec-save', qw( 
+    firewall-adjust 40
+));
 
 #
 # Event certificate-update 
