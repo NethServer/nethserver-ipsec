@@ -6,6 +6,7 @@ ipcp-accept-local
 ipcp-accept-remote
 noccp
 auth
+refuse-pap
 crtscts
 idle 1800
 mtu 1410
