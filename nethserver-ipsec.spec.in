@@ -38,4 +38,7 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %defattr(-,root,root)
 
 %changelog
+* Tue Oct 22 2013 Davide Principi <davide.principi@nethesis.it> - 1.0.0-1.ns6
+- VPN: support IPsec/L2TP - Feature #1957 [NethServer]
+
 
