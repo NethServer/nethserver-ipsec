@@ -6,9 +6,15 @@
 {
     use esmith::NetworksDB;
     my $ndb = esmith::NetworksDB->open_ro();
-    my $redRecord = $ndb->get_by_role('red');
-    my $greenRecord = $ndb->green();
+    my @reds = $ndb->get_by_role('red');
 
-    $OUT = sprintf("ivpn %12s:0.0.0.0/0", $redRecord ? $redRecord->key : $greenRecord->key);
+    if (scalar(@reds) > 0) {
+        foreach (@reds) {
+            $OUT .= sprintf("ivpn %12s:0.0.0.0/0\n", $_->key);
+        }
+    } else {
+        my $greenRecord = $ndb->green();
+        $OUT .= sprintf("ivpn %12s:0.0.0.0/0", $greenRecord->key);
+    }
 }
 lvpn         ppp+:dynamic
