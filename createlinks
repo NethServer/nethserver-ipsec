@@ -29,6 +29,7 @@ use esmith::Build::CreateLinks  qw(:all);
 event_actions('nethserver-ipsec-update', qw( 
     initialize-default-databases 00
     nethserver-ipsec-synchronize-nssdb 30
+    nethserver-ipsec-synchronize-l2tpusers 40
 ));
 
 event_templates('nethserver-ipsec-update', qw(
@@ -75,7 +76,18 @@ event_actions('certificate-update', qw(
 #
 # Event nethserver-samba-{save,update}
 #
-event_templates($_, '/etc/ppp/options.xl2tpd') foreach (qw(
+event_actions($_, qw(
+   nethserver-ipsec-synchronize-l2tpusers 97
+)) foreach (qw(
    nethserver-samba-save 
    nethserver-samba-update
 ));
+
+
+#
+# Event nethserver-vpn-save
+#
+event_actions('nethserver-vpn-save', qw(
+   nethserver-ipsec-synchronize-l2tpusers 30   
+));
+

@@ -1,0 +1,65 @@
+#!/usr/bin/perl
+
+#
+# Copyright (C) 2014 Nethesis S.r.l.
+# http://www.nethesis.it - support@nethesis.it
+# 
+# This script is part of NethServer.
+# 
+# NethServer is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License,
+# or any later version.
+# 
+# NethServer is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with NethServer.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+use strict;
+use NethServer::Directory;
+use esmith::AccountsDB;
+
+my $event = shift;
+my $errors = 0;
+my $builtinGroup = 'l2tpusers';
+
+my $ldap = NethServer::Directory->new() || die("Could not connect LDAP server");
+my $accountsDb = esmith::AccountsDB->open_ro() || die("Could not open AccountsDB");
+
+if(system(qw(/sbin/e-smith/expand-template /etc/ppp/options.xl2tpd)) != 0) {
+    $errors ++;
+    warn "[ERROR] failed to expand template /etc/ppp/options.xl2tpd\n";
+}
+
+#
+# Initialize builtin group, if not exists
+#
+if( ! getgrnam($builtinGroup)) {
+    system('/usr/sbin/lgroupadd', '-g', $ldap->getFreeId(), $builtinGroup);
+    if($? != 0) {
+	$errors ++;
+	warn "[ERROR] failed to add l2tpusers group.\n";
+    }
+    system('/usr/bin/net', 'sam', 'mapunixgroup', $builtinGroup);
+    if($? != 0) {
+	warn "[ERROR] Failed to add group `$builtinGroup` in SAM database!\n";
+	$errors ++;
+    }    
+}
+
+#
+# Set group members
+#
+my @members = map { (($_->prop('VPNClientAccess') || '') eq 'yes') ? $_->key : () } $accountsDb->users();
+
+if( ! $ldap->setGroupMembers($builtinGroup, @members)) {
+    $errors ++;
+    warn "[ERROR] Failed to set members of $builtinGroup.\n";
+}
+
+exit($errors == 0 ? 0 : 1);

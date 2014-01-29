@@ -8,7 +8,7 @@ Source0: %{name}-%{version}.tar.gz
 BuildArch: noarch
 
 Requires: openswan, xl2tpd
-Requires: nethserver-firewall-base, nethserver-vpn
+Requires: nethserver-firewall-base, nethserver-vpn, nethserver-samba
 
 BuildRequires: perl
 BuildRequires: nethserver-devtools 

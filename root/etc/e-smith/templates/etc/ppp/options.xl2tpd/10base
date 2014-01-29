@@ -28,9 +28,19 @@ connect-delay 5000
     # If enabled, *-secrets files are no longer used.
     #
 
-    $OUT = "# ntlm_auth binary not found";
-    if ( -x "/usr/bin/ntlm_auth" ) {
-	$OUT = "plugin winbind.so\n" .
-	    "ntlm_auth-helper \"/usr/bin/ntlm_auth --helper-protocol=ntlm-server-1\"";
+    $OUT = "# ntlm_auth disabled. Server role must be PDC";
+
+    if ($smb{'ServerRole'} eq 'PDC') {
+	# Extract smb.conf workgroup value from testparm command:
+    	my $smbDomain = qx(/usr/bin/testparm -s --parameter-name workgroup 2>/dev/null);
+	chomp($smbDomain);
+
+	# A ton of backslashes is needed because of bash and ntlm_auth escaping:
+	my $groupClause = sprintf(q(--require-membership-of=%s\\\\\\\\l2tpusers), $smbDomain);
+
+    	$OUT = "plugin winbind.so\n" .
+            "ntlm_auth-helper \"/usr/bin/ntlm_auth $groupClause --helper-protocol=ntlm-server-1\"";
     }
 }
+
+
