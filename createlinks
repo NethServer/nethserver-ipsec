@@ -29,7 +29,6 @@ use esmith::Build::CreateLinks  qw(:all);
 event_actions('nethserver-ipsec-update', qw( 
     initialize-default-databases 00
     nethserver-ipsec-synchronize-nssdb 30
-    nethserver-ipsec-synchronize-l2tpusers 40
 ));
 
 event_templates('nethserver-ipsec-update', qw(
@@ -74,13 +73,10 @@ event_actions('certificate-update', qw(
 
 
 #
-# Event nethserver-samba-{save,update}
+# Event nethserver-samba-save
 #
-event_actions($_, qw(
+event_actions('nethserver-samba-save', qw(
    nethserver-ipsec-synchronize-l2tpusers 97
-)) foreach (qw(
-   nethserver-samba-save 
-   nethserver-samba-update
 ));
 
 
@@ -89,5 +85,13 @@ event_actions($_, qw(
 #
 event_actions('nethserver-vpn-save', qw(
    nethserver-ipsec-synchronize-l2tpusers 30   
+));
+
+
+#
+# FIXME event runlevel-adjust
+#
+event_actions('runlevel-adjust', qw(
+    nethserver-ipsec-synchronize-l2tpusers 98
 ));
 
