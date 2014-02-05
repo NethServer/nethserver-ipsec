@@ -38,6 +38,10 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %defattr(-,root,root)
 
 %changelog
+* Wed Feb 05 2014 Davide Principi <davide.principi@nethesis.it> - 1.0.1-1.ns6
+- Move admin user in LDAP DB - Feature #2492 [NethServer]
+- IPSec: honor VPNClientAccess property - Enhancement #2294 [NethServer]
+
 * Tue Oct 22 2013 Davide Principi <davide.principi@nethesis.it> - 1.0.0-1.ns6
 - VPN: support IPsec/L2TP - Feature #1957 [NethServer]
 
