@@ -1,5 +1,5 @@
 #
-# 15ipsec policy
+# 20policy_ipsec
 #
 lvpn     loc     ACCEPT    
 loc	 lvpn	 ACCEPT    
