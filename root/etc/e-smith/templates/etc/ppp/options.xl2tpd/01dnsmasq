@@ -1,0 +1,16 @@
+{
+    # 
+    # 01dnsmasq
+    #
+    use NethServer::Service;
+    use esmith::NetworksDB;
+    my $s = new NethServer::Service('dnsmasq');
+    if( $s->is_owned() && $s->is_enabled() ) {
+        my $networksDb = esmith::NetworksDB->open_ro() || die("Could not open NetworksDB");
+        my $green = $networksDb->green();
+        if($green && $green->prop('ipaddr')) {
+            @dnsServers = ($green->prop('ipaddr'));
+        }
+    }
+    '';
+}
