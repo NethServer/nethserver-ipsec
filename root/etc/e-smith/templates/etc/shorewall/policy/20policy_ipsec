@@ -9,3 +9,16 @@ $FW      ivpn    ACCEPT
 loc      ivpn    ACCEPT
 ivpn     loc     ACCEPT
 ivpn     $FW     ACCEPT
+{
+    use esmith::NetworksDB;
+    my $ndb = esmith::NetworksDB->open_ro();
+
+    if (defined($ndb->blue())) {
+        $OUT .= "ivpn        blue           ACCEPT\n";
+        $OUT .= "lvpn        blue           ACCEPT\n";
+    }
+    if (defined($ndb->orange())) {
+        $OUT .= "ivpn        orang          ACCEPT\n";
+        $OUT .= "lvpn        orang          ACCEPT\n";
+    }
+}
