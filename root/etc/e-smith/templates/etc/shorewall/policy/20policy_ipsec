@@ -8,3 +8,4 @@ $FW	 lvpn	 ACCEPT
 $FW      ivpn    ACCEPT    
 loc      ivpn    ACCEPT
 ivpn     loc     ACCEPT
+ivpn     $FW     ACCEPT
