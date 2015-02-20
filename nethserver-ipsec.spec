@@ -1,7 +1,7 @@
 Summary: NethServer IPsec-based VPN configuration
 Name: nethserver-ipsec
 Version: 1.0.2
-Release: 1
+Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
 Source0: %{name}-%{version}.tar.gz
