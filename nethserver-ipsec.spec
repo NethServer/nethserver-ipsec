@@ -1,6 +1,6 @@
 Summary: NethServer IPsec-based VPN configuration
 Name: nethserver-ipsec
-Version: 1.0.2
+Version: 1.0.3
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -38,6 +38,10 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %defattr(-,root,root)
 
 %changelog
+* Wed Mar 11 2015 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.0.3-1
+- VPN: missing firewall policy - Bug #3052 [NethServer]
+- nethserver-devbox replacements - Feature #3009 [NethServer]
+
 * Tue Dec 09 2014 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.0.2-1.ns6
 - DNS: remove role property from dns db key - Enhancement #2915 [NethServer]
 - Firewall: select default policy - Feature #2714 [NethServer]
