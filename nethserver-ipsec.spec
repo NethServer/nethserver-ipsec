@@ -10,7 +10,6 @@ BuildArch: noarch
 Requires: openswan, xl2tpd
 Requires: nethserver-firewall-base, nethserver-vpn, nethserver-samba
 
-BuildRequires: perl
 BuildRequires: nethserver-devtools 
 
 %description
@@ -26,19 +25,16 @@ mkdir -p root%{perl_vendorlib}
 mv -v lib/perl/NethServer root%{perl_vendorlib}
 
 %install
-rm -rf $RPM_BUILD_ROOT
-(cd root; find . -depth -print | cpio -dump $RPM_BUILD_ROOT)
-%{genfilelist} $RPM_BUILD_ROOT \
+rm -rf %{buildroot}
+(cd root; find . -depth -print | cpio -dump %{buildroot})
+%{genfilelist} %{buildroot} \
    --file /etc/ipsec.d/nsspassword 'attr(0600,root,root)' \
   > %{name}-%{version}-filelist
-echo "%doc COPYING" >> %{name}-%{version}-filelist
-
-%post
-
-%preun
 
 %files -f %{name}-%{version}-filelist
 %defattr(-,root,root)
+%doc COPYING
+%dir %{_nseventsdir}/%{name}-update
 
 %changelog
 * Fri Dec 04 2015 Davide Principi <davide.principi@nethesis.it> - 1.1.4-1
