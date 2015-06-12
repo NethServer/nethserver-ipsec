@@ -6,24 +6,13 @@
     my $db = esmith::AccountsDB->open_ro('vpn') || die("Could not open vpn DB!");
 
     $OUT = '';
-    foreach my $account ($db->get_all_by_prop('type' => 'tunnel')) {
+    foreach my $tunnel ($db->get_all_by_prop('type' => 'ipsec-tunnel')) {
 
-	if($account->prop('VPNType') ne 'ipsec' || $account->prop('AuthMode') ne 'psk') {
-	    next;
-	}
+	my $psk = $tunnel->prop('psk') || next;
+	my $leftid = $tunnel->prop('leftid') || $tunnel->prop('left');
+	my $rightid = $tunnel->prop('rightid') || $tunnel->prop('right');
 
-	my $psk = $account->prop('Psk');
-
-	# Double quote is not allowed in configuration
-	if ($psk =~ /"/) {
-	    die("[ERROR] PSK value cannot contain double quotes (\")");
-	}
-	
-	$OUT .= sprintf("%s : PSK \"%s\"\n", ($account->prop('RemoteHost') || '# none'), $psk);
-    }
-
-    if( ! $OUT) {
-	$OUT = '# no client defined';
+        $OUT .= "$leftid $rightid : PSK \"$psk\"\n";
     }
 }
 

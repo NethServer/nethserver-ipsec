@@ -5,10 +5,12 @@
  
     use esmith::AccountsDB;   
     use esmith::NetworksDB;
+    use esmith::ConfigDB;
     use esmith::util;
 
     $networksDb = esmith::NetworksDB->open() || die("Could not open NetworksDB");
     $accountsDb = esmith::AccountsDB->open() || die("Could not open AccountsDB");
+    $vpnsDb = esmith::ConfigDB->open("vpn") || die("Could not open VPN DB");
 
     $conn = {
 	'%default' => {
