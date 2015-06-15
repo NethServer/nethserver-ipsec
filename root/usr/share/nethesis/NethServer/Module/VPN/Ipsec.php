@@ -33,7 +33,7 @@ class Ipsec extends \Nethgui\Controller\AbstractController
     public function initialize()
     {
         parent::initialize();
-        $this->declareParameter('status', Validate::SERVICESTATUS, array(array('configuration', 'ipsec', 'status'), array('configuration', 'xl2tpd', 'status')));
+        $this->declareParameter('status', Validate::SERVICESTATUS, array(array('configuration', 'ipsec', 'ServerStatus'), array('configuration', 'xl2tpd', 'status')));
         $this->declareParameter('KeyType', $this->createValidator()->memberOf(array('rsa', 'psk')), array('configuration', 'ipsec', 'KeyType'));
         $this->declareParameter('KeyPskSecret', Validate::NOTEMPTY, array('configuration', 'ipsec', 'KeyPskSecret'));
         $this->declareParameter('L2tpNetwork', Validate::IPv4, array('configuration', 'ipsec', 'L2tpNetwork'));

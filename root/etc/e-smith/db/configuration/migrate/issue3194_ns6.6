@@ -1,0 +1,24 @@
+{
+   #
+   # feature3194: change ipsec status prop accordingly to xl2tpd
+   #              remove access and TCPPorts props
+   #
+   #
+
+   use esmith::ConfigDB;
+   use esmith::util;
+
+   my $cdb = esmith::ConfigDB->open();
+
+   my $status = $cdb->get_prop('ipsec', 'status') || 'enabled';
+   my $ports = $cdb->get_prop_and_delete('ipsec', 'UDPPorts') || "";
+   if ($ports ne '') {
+       my $l2tpd_status = $cdb->get_prop('xl2tpd', 'status') || 'disabled';
+       $cdb->set_prop('ipsec', 'ServerStatus', $l2tpd_status);
+       $cdb->get_prop_and_delete('ipsec', 'access');
+       $cdb->set_prop('ipsec', 'status', 'enabled');
+   }
+
+   "";
+}
+

@@ -3,6 +3,11 @@
     # 20l2tp
     #
 
+    my $status = $ipsec{'ServerStatus'} || 'disabled';
+    if ($status eq 'disabled') {
+        return '';
+    }
+
     # L2TP connections
     $conn->{'~L2TP'} = {
 	'auto' => 'add',
