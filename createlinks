@@ -60,7 +60,8 @@ event_services('nethserver-ipsec-save', qw(
     xl2tpd restart
 ));
 
-event_actions('nethserver-ipsec-save', qw( 
+event_actions('nethserver-ipsec-save', qw(
+    nethserver-ipsec-ids 30 
     firewall-adjust 40
 ));
 
