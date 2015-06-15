@@ -151,11 +151,7 @@ class Modify extends \Nethgui\Controller\Table\Modify
 
     protected function onParametersSaved($changedParameters)
     {
-        $event = $this->getIdentifier();
-        if ($event == "update") {
-            $event = "modify";
-        }
-#        $this->getPlatform()->signalEvent(sprintf('nethserver-vpn-%s@post-process', $event), array($this->parameters['name']));
+        $this->getPlatform()->signalEvent('nethserver-ipsec-save');
     }
 
 }
