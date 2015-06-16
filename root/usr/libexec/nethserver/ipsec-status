@@ -9,6 +9,8 @@ my %tunnels;
 
 foreach my $tunnel ($db->get_all_by_prop('type' => 'ipsec-tunnel')) {
     my %status;
+    my $s = $tunnel->prop('status') || "disabled";
+    next if ($s eq 'disabled');
     my $name = $tunnel->key;
     $status{'localnets'} = $tunnel->prop('leftsubnets');
     $status{'remotenets'} = $tunnel->prop('rightsubnets');
