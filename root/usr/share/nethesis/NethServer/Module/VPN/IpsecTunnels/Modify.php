@@ -45,7 +45,7 @@ class Modify extends \Nethgui\Controller\Table\Modify
             array('right', Validate::IPv4, \Nethgui\Controller\Table\Modify::FIELD),
             array('rightsubnets', Validate::NOTEMPTY, \Nethgui\Controller\Table\Modify::FIELD),
             array('rightid', Validate::ANYTHING, \Nethgui\Controller\Table\Modify::FIELD),
-            array('psk', $this->createValidator()->minLength(20), \Nethgui\Controller\Table\Modify::FIELD),
+            array('psk', $this->createValidator()->minLength(6), \Nethgui\Controller\Table\Modify::FIELD),
             array('ikelifetime', Validate::POSITIVE_INTEGER, \Nethgui\Controller\Table\Modify::FIELD),
             array('salifetime', Validate::POSITIVE_INTEGER, \Nethgui\Controller\Table\Modify::FIELD),
             array('ike', $ac, \Nethgui\Controller\Table\Modify::FIELD),
