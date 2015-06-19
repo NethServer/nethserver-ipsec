@@ -37,7 +37,7 @@ event_templates('nethserver-ipsec-update', qw(
     /etc/xl2tpd/xl2tpd.conf
     /etc/ppp/options.xl2tpd
     /etc/ipsec.d/nsspassword
-    /etc/sudeors
+    /etc/sudoers
 ));
 
 event_services('nethserver-ipsec-update', qw(
