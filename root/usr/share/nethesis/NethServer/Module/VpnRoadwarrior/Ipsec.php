@@ -1,5 +1,6 @@
 <?php
-namespace NethServer\Module\VPN;
+
+namespace NethServer\Module\VpnRoadwarrior;
 
 /*
  * Copyright (C) 2013 Nethesis S.r.l.
@@ -30,6 +31,12 @@ use Nethgui\System\PlatformInterface as Validate;
  */
 class Ipsec extends \Nethgui\Controller\AbstractController
 {
+
+    protected function initializeAttributes(\Nethgui\Module\ModuleAttributesInterface $a)
+    {
+        return new \NethServer\Tool\CustomModuleAttributesProvider($a, array('languageCatalog' => 'NethServer_Module_VPN_Ipsec'));
+    }
+
     public function initialize()
     {
         parent::initialize();
@@ -45,7 +52,8 @@ class Ipsec extends \Nethgui\Controller\AbstractController
         return $ipsec;
     }
 
-    public function writeStatus($status) {
+    public function writeStatus($status)
+    {
         return array($status, $status);
     }
 
@@ -53,4 +61,5 @@ class Ipsec extends \Nethgui\Controller\AbstractController
     {
         $this->getPlatform()->signalEvent('nethserver-ipsec-save');
     }
+
 }

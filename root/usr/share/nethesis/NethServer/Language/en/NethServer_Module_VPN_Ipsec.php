@@ -1,6 +1,6 @@
 <?php
 
-$L['Ipsec_Title'] = 'L2TP/IPsec';
+$L['Ipsec_Title'] = 'L2TP';
 $L['Ipsec_Header'] = 'IPsec configuration';
 $L['status_label'] = 'Enable L2TP';
 $L['Authentication_label'] = 'IPsec authentication';
