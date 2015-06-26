@@ -21,6 +21,8 @@ Configures a VPN based on IPsec protocol
 
 %build
 perl createlinks
+mkdir -p root%{perl_vendorlib}
+mv -v lib/perl/NethServer root%{perl_vendorlib}
 
 %install
 rm -rf $RPM_BUILD_ROOT
