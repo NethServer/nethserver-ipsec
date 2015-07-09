@@ -26,6 +26,7 @@ use esmith::DB::db;
 use esmith::util;
 
 register_callback(\&ipsec_networks);
+register_callback(\&ipsec_tunnels);
 
 #
 # Push IPsec L2TP network
@@ -48,4 +49,20 @@ sub ipsec_networks
         push(@$results, {'cidr' => $cidr, 'provider' => 'IPsec'});
     }
 
+}
+
+#
+# Push IPsec tunnel network
+#
+sub ipsec_tunnels
+{
+    my $results = shift;
+
+    my $vpn_db = esmith::DB::db->open_ro('vpn');
+    foreach ($vpn_db->get_all_by_prop('type' => 'ipsec-tunnel')) {
+        my $subnets = $_->prop('rightsubnets') || 'next';
+        foreach my $net (split(/,/, $subnets)) {
+            push(@$results, {'cidr' => $net, 'provider' => 'IPsec'});
+        }
+    }
 }
