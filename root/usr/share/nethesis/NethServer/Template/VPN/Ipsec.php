@@ -12,4 +12,4 @@ echo $view->fieldsetSwitch('status', 'enabled', Nethgui\Renderer\WidgetFactoryIn
         ->insert($view->textInput('L2tpNetmask')))
 ;
 
-echo $view->buttonList($view::BUTTON_SUBMIT);
+echo $view->buttonList($view::BUTTON_SUBMIT | $view::BUTTON_HELP);
