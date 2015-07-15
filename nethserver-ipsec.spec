@@ -20,6 +20,7 @@ Configures a VPN based on IPsec protocol
 %setup
 
 %build
+%{makedocs}
 perl createlinks
 mkdir -p root%{perl_vendorlib}
 mv -v lib/perl/NethServer root%{perl_vendorlib}
