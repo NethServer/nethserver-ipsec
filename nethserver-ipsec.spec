@@ -1,6 +1,6 @@
 Summary: NethServer IPsec-based VPN configuration
 Name: nethserver-ipsec
-Version: 1.1.0
+Version: 1.1.1
 Release: 1%{?dist}
 License: GPL
 URL: %{url_prefix}/%{name} 
@@ -41,6 +41,10 @@ echo "%doc COPYING" >> %{name}-%{version}-filelist
 %defattr(-,root,root)
 
 %changelog
+* Thu Aug 27 2015 Davide Principi <davide.principi@nethesis.it> - 1.1.1-1
+- ipsec.log not rotated - Bug #3237 [NethServer]
+- Firewall rules: support hosts within VPN zones - Enhancement #3233 [NethServer]
+
 * Thu Jul 16 2015 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.1.0-1
 - IPsec tunnels (net2net) web interface - Feature #3194 [NethServer]
 - Event trusted-networks-modify - Enhancement #3195 [NethServer]
