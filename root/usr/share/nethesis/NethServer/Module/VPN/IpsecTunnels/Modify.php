@@ -63,12 +63,14 @@ class Modify extends \Nethgui\Controller\Table\Modify
         }
         $lc = $this->createValidator()->memberOf($i_names);
 
+        $rv = $this->createValidator()->orValidator($this->createValidator()->regexp('/%any/'),$this->createValidator(Validate::IPv4));
+
         $parameterSchema = array(
             array('name', Validate::USERNAME, \Nethgui\Controller\Table\Modify::KEY),
             array('left', $lc, \Nethgui\Controller\Table\Modify::FIELD),
             array('leftsubnets', Validate::NOTEMPTY, \Nethgui\Controller\Table\Modify::FIELD),
             array('leftid', Validate::ANYTHING, \Nethgui\Controller\Table\Modify::FIELD),
-            array('right', Validate::IPv4, \Nethgui\Controller\Table\Modify::FIELD),
+            array('right', $rv, \Nethgui\Controller\Table\Modify::FIELD),
             array('rightsubnets', Validate::NOTEMPTY, \Nethgui\Controller\Table\Modify::FIELD),
             array('rightid', Validate::ANYTHING, \Nethgui\Controller\Table\Modify::FIELD),
             array('psk', $this->createValidator()->minLength(6), \Nethgui\Controller\Table\Modify::FIELD),
@@ -146,6 +148,20 @@ class Modify extends \Nethgui\Controller\Table\Modify
         $view['leftDatasource'] = $left;
 
     }
+
+    public function validate(\Nethgui\Controller\ValidationReportInterface $report)
+    {
+        parent::validate($report);
+        if ($this->getRequest()->isMutation() && $this->parameters['right'] == '%any') {
+            if (!$this->parameters['leftid'] || $this->parameters['leftid'][0] != '@')  {
+                $report->addValidationErrorMessage($this, 'leftid', 'id_notempty');
+            }
+            if (!$this->parameters['rightid'] || $this->parameters['rightid'][0] != '@')  {
+                $report->addValidationErrorMessage($this, 'rightid', 'id_notempty');
+            }
+        }
+    }
+
 
     private function maskToCidr($mask){
         $long = ip2long($mask);
