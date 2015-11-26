@@ -33,13 +33,39 @@ class Modify extends \Nethgui\Controller\Table\Modify
     private $hashes = array('sha1', 'sha2_256', 'sha2_384', 'sha2_512', 'md5');
     private $pfsgroups = array('modp1024','modp1536', 'modp2048', 'modp3072', 'modp4096', 'modp6144', 'modp8192');
 
+    private function getNetworkInterfaces()
+    {
+        static $interfaces;
+
+        if (isset($interfaces)) {
+            return $interfaces;
+        }
+
+        $interfaces = array_filter($this->getPlatform()->getDatabase('networks')->getAll(), function ($record) {
+            if ( isset($record['role']) && (!in_array($record['role'], array('slave','alias','bridged'))) ) {
+                return TRUE;
+            }
+
+            return FALSE;
+        });
+
+        return $interfaces;
+    }
+
     public function initialize()
     {
         $yn = $this->createValidator()->memberOf(array('yes', 'no'));
         $ac = $this->createValidator()->memberOf(array('auto', 'custom'));
+        
+        $i_names = array();
+        foreach (array_keys($this->getNetworkInterfaces()) as $key) {
+            $i_names[] = "%$key";
+        }
+        $lc = $this->createValidator()->memberOf($i_names);
+
         $parameterSchema = array(
             array('name', Validate::USERNAME, \Nethgui\Controller\Table\Modify::KEY),
-            array('left', Validate::IPv4, \Nethgui\Controller\Table\Modify::FIELD),
+            array('left', $lc, \Nethgui\Controller\Table\Modify::FIELD),
             array('leftsubnets', Validate::NOTEMPTY, \Nethgui\Controller\Table\Modify::FIELD),
             array('leftid', Validate::ANYTHING, \Nethgui\Controller\Table\Modify::FIELD),
             array('right', Validate::IPv4, \Nethgui\Controller\Table\Modify::FIELD),
@@ -109,8 +135,13 @@ class Modify extends \Nethgui\Controller\Table\Modify
         }, $this->pfsgroups);
 
         $left = array();
-        foreach ($this->readIPs() as $ipaddr => $props) {
-            $left[] = array($ipaddr, $ipaddr ." - ".$props[0]." (".$props[1].")");
+        foreach ($this->getNetworkInterfaces() as $key => $props) {
+            if ($props['ipaddr']) {
+                $label = "$key ({$props['role']}) - {$props['ipaddr']}";
+            } else {
+                $label = "$key ({$props['role']}) - DHCP";
+            }
+            $left[] = array("%$key", $label);
         }
         $view['leftDatasource'] = $left;
 
