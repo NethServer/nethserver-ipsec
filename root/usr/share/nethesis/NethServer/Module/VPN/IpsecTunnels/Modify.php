@@ -153,17 +153,6 @@ class Modify extends \Nethgui\Controller\Table\Modify
         return 32-log(($long ^ $base)+1,2);
     }
 
-    private function readIPs()
-    {
-        $ret = array();
-        $interfaces = $this->getPlatform()->getDatabase('networks')->getAll();
-        foreach ($interfaces as $interface => $props) {
-            if(isset($props['role']) && isset($props['ipaddr'])) {
-                $ret[$props['ipaddr']] = array($interface,$props['role']);
-            }
-        }
-        return $ret;
-    }
 
     private function readNetworks()
     {
