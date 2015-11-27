@@ -2,6 +2,8 @@
     #
     # 20l2tp
     #
+    use esmith::NetworksDB;
+    my $ndb = esmith::NetworksDB->open_ro();
 
     my $status = $ipsec{'ServerStatus'} || 'disabled';
     if ($status eq 'disabled') {
@@ -9,25 +11,27 @@
     }
 
     # L2TP connections
-    $conn->{'~L2TP'} = {
-	'auto' => 'add',
-	'pfs' => 'no',
-	   
-	'left' => '%defaultroute',
-        'leftprotoport' => '17/%any',
+    foreach ($ndb->red()) {
+        $conn->{'~L2TP'.$_->key} = {
+            'auto' => 'add',
+            'pfs' => 'no',
 
-	'right' => '%any',
-	'rightprotoport' => '17/%any',
+            'left' => '%'.$_->key,
+            'leftprotoport' => '17/%any',
 
-	'ikelifetime' => '8h',
-	'keylife' => '1h',
+            'right' => '%any',
+            'rightprotoport' => '17/%any',
 
-	'dpddelay' => '30',
-	'dpdtimeout' => '120',
-	'dpdaction' => 'clear',
+            'ikelifetime' => '8h',
+            'keylife' => '1h',
 
-	'type' => 'transport',
-    };
+            'dpddelay' => '30',
+            'dpdtimeout' => '120',
+            'dpdaction' => 'clear',
+
+        'type' => 'transport',
+        };
+    }
 
     '';
 }
