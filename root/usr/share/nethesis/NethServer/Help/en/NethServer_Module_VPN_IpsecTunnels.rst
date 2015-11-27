@@ -31,7 +31,8 @@ Local identifier
     If left blank, the system will automatic create a new identifier.
 
 Remote IP
-    IP address of the other side of the tunnel.
+    IP address of the other side of the tunnel. The special word ``%any`` is
+    accepted on one side of the tunnel.
 
 Remote subnets
     A comma-separated list of local networks which will be accessible from the local side

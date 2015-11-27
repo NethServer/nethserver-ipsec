@@ -52,3 +52,4 @@ $L['salifetime_label'] = 'Key life time (seconds)';
 $L['connection_label'] = 'Connection';
 $L['Key_label'] = 'Tunnel';
 $L['auth_label'] = 'Authentication';
+$L['id_notempty'] = 'An endpoint identifier starting with @ is required';
