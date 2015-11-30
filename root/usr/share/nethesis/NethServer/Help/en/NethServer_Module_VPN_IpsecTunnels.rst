@@ -40,7 +40,7 @@ Remote subnets
 
 Remote identifier
     A special name used to identify the tunnel on the remote side. 
-    If left blank, the system will automatic create a new identifier.
+    If left blank, the system creates a new identifier.
 
 Enable DPD (Dead Peer Detection)
     Restart the tunnel if a peer is unreachable.

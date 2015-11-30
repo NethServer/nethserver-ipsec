@@ -1,5 +1,23 @@
 <?php
 
+/* @var $view \Nethgui\Renderer\Xhtml */
+
+$nameId = $view->getUniqueId('name');
+$leftId = $view->getUniqueId('leftid');
+$rightId = $view->getUniqueId('rightid');
+
+$view->includeJavascript("
+    jQuery(function ($) {
+        var updateWatermarks = function() {
+            $('#${leftId}').attr('placeholder', '@' + $('#${nameId}').prop('value') + '.local');
+            $('#${rightId}').attr('placeholder', '@' + $('#${nameId}').prop('value') + '.remote');
+        };
+
+        $('#${nameId}').on('change keyup', updateWatermarks);
+        $('#${rightId}').on('nethguiupdateview', updateWatermarks);
+    });
+    ");
+
 
 if ($view->getModule()->getIdentifier() == 'update') {
     $headerText = 'update_header_label';

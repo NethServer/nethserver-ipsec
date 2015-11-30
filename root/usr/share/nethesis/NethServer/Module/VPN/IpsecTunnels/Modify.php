@@ -41,8 +41,11 @@ class Modify extends \Nethgui\Controller\Table\Modify
             return $interfaces;
         }
 
-        $interfaces = array_filter($this->getPlatform()->getDatabase('networks')->getAll(), function ($record) {
-            if ( isset($record['role']) && (!in_array($record['role'], array('slave','alias','bridged'))) ) {
+        $interfaces = array_filter($this->getPlatform()->getDatabase('networks')->getAll(), function ($props) {
+            if ( isset($props['role'], $props['type'])
+                    && $props['role'] === 'red'
+                    && in_array($props['type'], array('ethernet', 'vlan', 'bridge', 'bond', 'xdsl'))
+                    ) {
                 return TRUE;
             }
 
@@ -62,17 +65,17 @@ class Modify extends \Nethgui\Controller\Table\Modify
             $i_names[] = "%$key";
         }
         $lc = $this->createValidator()->memberOf($i_names);
-
-        $rv = $this->createValidator()->orValidator($this->createValidator()->regexp('/%any/'),$this->createValidator(Validate::IPv4));
+        $rv = $this->createValidator()->orValidator($this->createValidator(Validate::IPv4), $this->createValidator()->equalTo('%any'));
+        $idv = $this->createValidator()->orValidator($this->createValidator(Validate::IPv4), $this->createValidator()->regexp('/^@([a-z0-9](-?[a-z0-9])*)(\.([a-z0-9](-?[a-z0-9])*))*$/i', 'valid_at_prefix_identifier')->maxLength(255));
 
         $parameterSchema = array(
             array('name', Validate::USERNAME, \Nethgui\Controller\Table\Modify::KEY),
             array('left', $lc, \Nethgui\Controller\Table\Modify::FIELD),
             array('leftsubnets', Validate::NOTEMPTY, \Nethgui\Controller\Table\Modify::FIELD),
-            array('leftid', Validate::ANYTHING, \Nethgui\Controller\Table\Modify::FIELD),
+            array('leftid', $idv, \Nethgui\Controller\Table\Modify::FIELD),
             array('right', $rv, \Nethgui\Controller\Table\Modify::FIELD),
             array('rightsubnets', Validate::NOTEMPTY, \Nethgui\Controller\Table\Modify::FIELD),
-            array('rightid', Validate::ANYTHING, \Nethgui\Controller\Table\Modify::FIELD),
+            array('rightid', $idv, \Nethgui\Controller\Table\Modify::FIELD),
             array('psk', $this->createValidator()->minLength(6), \Nethgui\Controller\Table\Modify::FIELD),
             array('ikelifetime', Validate::POSITIVE_INTEGER, \Nethgui\Controller\Table\Modify::FIELD),
             array('salifetime', Validate::POSITIVE_INTEGER, \Nethgui\Controller\Table\Modify::FIELD),
@@ -90,7 +93,6 @@ class Modify extends \Nethgui\Controller\Table\Modify
             array('dpdaction', $this->createValidator()->memberOf(array('restart','hold')), \Nethgui\Controller\Table\Modify::FIELD),
         );
         
-
         $this->setSchema($parameterSchema);
         $this->setDefaultValue('status', 'enabled');
         $this->setDefaultValue('ike', 'auto');
@@ -105,7 +107,20 @@ class Modify extends \Nethgui\Controller\Table\Modify
         parent::initialize();
     }
 
-   public function prepareView(\Nethgui\View\ViewInterface $view)
+    public function bind(\Nethgui\Controller\RequestInterface $request)
+    {
+        parent::bind($request);
+        if($request->isMutation()) {
+            if($this->parameters['leftid'] === '') {
+                $this->parameters['leftid'] = sprintf('@%s.local', $this->parameters['name']);
+            }
+            if($this->parameters['rightid'] === '') {
+                $this->parameters['rightid'] = sprintf('@%s.remote', $this->parameters['name']);
+            }
+        }
+    }
+
+    public function prepareView(\Nethgui\View\ViewInterface $view)
     {
         parent::prepareView($view);
         $templates = array(
@@ -138,37 +153,23 @@ class Modify extends \Nethgui\Controller\Table\Modify
 
         $left = array();
         foreach ($this->getNetworkInterfaces() as $key => $props) {
-            if ($props['ipaddr']) {
-                $label = "$key ({$props['role']}) - {$props['ipaddr']}";
+            if (isset($props['ipaddr']) && $props['ipaddr']) {
+                $label = "$key - {$props['ipaddr']}";
+            } elseif(isset($props['bootproto']) && $props['bootproto'] === 'dhcp') {
+                $label = "$key - DHCP";
             } else {
-                $label = "$key ({$props['role']}) - DHCP";
+                continue;
             }
             $left[] = array("%$key", $label);
         }
         $view['leftDatasource'] = $left;
-
     }
-
-    public function validate(\Nethgui\Controller\ValidationReportInterface $report)
-    {
-        parent::validate($report);
-        if ($this->getRequest()->isMutation() && $this->parameters['right'] == '%any') {
-            if (!$this->parameters['leftid'] || $this->parameters['leftid'][0] != '@')  {
-                $report->addValidationErrorMessage($this, 'leftid', 'id_notempty');
-            }
-            if (!$this->parameters['rightid'] || $this->parameters['rightid'][0] != '@')  {
-                $report->addValidationErrorMessage($this, 'rightid', 'id_notempty');
-            }
-        }
-    }
-
 
     private function maskToCidr($mask){
         $long = ip2long($mask);
         $base = ip2long('255.255.255.255');
         return 32-log(($long ^ $base)+1,2);
     }
-
 
     private function readNetworks()
     {
@@ -183,7 +184,6 @@ class Modify extends \Nethgui\Controller\Table\Modify
         }
         return $ret;
     }
-
 
     protected function onParametersSaved($changedParameters)
     {
