@@ -66,7 +66,7 @@ class Modify extends \Nethgui\Controller\Table\Modify
         }
         $lc = $this->createValidator()->memberOf($i_names);
         $rv = $this->createValidator()->orValidator($this->createValidator(Validate::IPv4), $this->createValidator()->equalTo('%any'));
-        $idv = $this->createValidator()->orValidator($this->createValidator(Validate::IPv4), $this->createValidator()->regexp('/^@([a-z0-9](-?[a-z0-9])*)(\.([a-z0-9](-?[a-z0-9])*))*$/i', 'valid_at_prefix_identifier')->maxLength(255));
+        $idv = $this->createValidator()->maxLength(63);
 
         $parameterSchema = array(
             array('name', Validate::USERNAME, \Nethgui\Controller\Table\Modify::KEY),
