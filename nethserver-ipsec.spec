@@ -26,12 +26,13 @@ mkdir -p root%{perl_vendorlib}
 mv -v lib/perl/NethServer root%{perl_vendorlib}
 
 %install
-rm -rf $RPM_BUILD_ROOT
-(cd root; find . -depth -print | cpio -dump $RPM_BUILD_ROOT)
-%{genfilelist} $RPM_BUILD_ROOT \
+rm -rf %{buildroot}
+(cd root; find . -depth -print | cpio -dump %{buildroot})
+%{genfilelist} %{buildroot} \
    --file /etc/ipsec.d/nsspassword 'attr(0600,root,root)' \
   > %{name}-%{version}-filelist
-echo "%doc COPYING" >> %{name}-%{version}-filelist
+%doc COPYING
+%dir %{_nseventsdir}/%{name}-update
 
 %post
 
