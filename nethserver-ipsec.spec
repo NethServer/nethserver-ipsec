@@ -31,8 +31,6 @@ rm -rf %{buildroot}
 %{genfilelist} %{buildroot} \
    --file /etc/ipsec.d/nsspassword 'attr(0600,root,root)' \
   > %{name}-%{version}-filelist
-%doc COPYING
-%dir %{_nseventsdir}/%{name}-update
 
 %post
 
@@ -40,6 +38,8 @@ rm -rf %{buildroot}
 
 %files -f %{name}-%{version}-filelist
 %defattr(-,root,root)
+%doc COPYING
+%dir %{_nseventsdir}/%{name}-update
 
 %changelog
 * Mon Nov 30 2015 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.1.3-1
