@@ -6,6 +6,8 @@
     # Generate formatted output
     $OUT = '';
     foreach my $section (sort keys %{$conn}) {
+        # temporary disable L2TP until new implementation (Refs NethServer/dev#5018)
+        next if ($section eq '%default');
 	$OUT .= sprintf("conn %s\n", $section);
 	foreach my $key (sort keys %{$conn->{$section}}) {
 	    $OUT .= sprintf("    %s=%s\n", $key, $conn->{$section}->{$key});
