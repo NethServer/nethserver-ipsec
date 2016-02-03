@@ -158,7 +158,7 @@ class Modify extends \Nethgui\Controller\Table\Modify
             } elseif(isset($props['bootproto']) && $props['bootproto'] === 'dhcp') {
                 $label = "$key - DHCP";
             } elseif(isset($props['type']) && $props['type'] === 'xdsl') {
-                $label = "$key - PPPoE";\
+                $label = "$key - PPPoE";
             } else {
                 continue;
             }
