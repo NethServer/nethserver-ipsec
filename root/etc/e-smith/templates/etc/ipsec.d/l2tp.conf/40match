@@ -1,0 +1,20 @@
+        #
+        # 40match
+        #
+
+        left=%defaultroute
+        #
+        # For updated Windows 2000/XP clients,
+        # to support old clients as well, use leftprotoport=17/%any
+        leftprotoport=17/1701
+
+        #
+        # The remote user.
+        #
+        right=%any
+
+        # Using the magic port of "%any" means "any one single port". This is
+        # a work around required for Apple OSX clients that use a randomly
+        # high port.
+        rightprotoport=17/%any
+

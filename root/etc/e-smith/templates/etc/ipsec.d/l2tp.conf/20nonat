@@ -1,0 +1,8 @@
+#
+# 20nonat
+#
+conn L2TP-noNAT
+        auto=add
+        # l2tp-over-ipsec is { $ipsec{'ServerStatus'} }
+        type={ $ipsec{'ServerStatus'} eq 'enabled' ? 'transport' : 'reject' }
+

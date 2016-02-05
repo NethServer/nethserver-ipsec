@@ -1,0 +1,23 @@
+
+        #
+        # 30params
+        #
+        # Configuration for one user with any type of IPsec/L2TP client
+        # including the updated Windows 2000/XP (MS KB Q818043), but
+        # excluding the non-updated Windows 2000/XP.
+        #
+        
+        # Disable Perfect Forward Secrecy.
+        pfs=no
+        # we cannot rekey for %any, let client rekey
+        rekey=no
+
+        # Apple iOS doesn't send delete notify so we need dead peer detection
+        # to detect vanishing clients
+        dpddelay=10
+        dpdtimeout=90
+        dpdaction=clear
+        # Set ikelifetime and keylife to same defaults windows has
+        ikelifetime=8h
+        keylife=1h
+

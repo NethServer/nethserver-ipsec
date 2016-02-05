@@ -33,6 +33,7 @@ event_actions('nethserver-ipsec-update', qw(
 
 event_templates('nethserver-ipsec-update', qw(
     /etc/ipsec.d/tunnels.conf
+    /etc/ipsec.d/l2tp.conf
     /etc/ipsec.d/tunnels.secrets
     /etc/xl2tpd/xl2tpd.conf
     /etc/ppp/options.xl2tpd
@@ -50,6 +51,7 @@ event_services('nethserver-ipsec-update', qw(
 #
 event_templates('nethserver-ipsec-save', qw(
     /etc/ipsec.d/tunnels.conf
+    /etc/ipsec.d/l2tp.conf
     /etc/ipsec.d/tunnels.secrets
     /etc/xl2tpd/xl2tpd.conf
     /etc/ppp/options.xl2tpd

@@ -1,0 +1,11 @@
+#
+# See also /usr/share/doc/libreswan-{VER}/examples
+#
+
+#
+# 10nat
+#
+conn L2TP-NAT
+        rightsubnet=vhost:%priv
+        also=L2TP-noNAT
+

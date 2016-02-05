@@ -1,0 +1,12 @@
+        #
+        # 25authby
+        #
+        # Use a { $ipsec{'KeyType'} eq 'psk' ? 'Preshared' : 'RSA'} Key.
+        #
+        authby={
+          if ($ipsec{'KeyType'} eq 'psk') {
+             $OUT = 'secret';
+          } else {
+             $OUT = "rsasig\n        keyingtries=3";
+          }
+        }
