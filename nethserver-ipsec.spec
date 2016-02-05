@@ -27,14 +27,17 @@ mv -v lib/perl/NethServer root%{perl_vendorlib}
 %install
 rm -rf %{buildroot}
 (cd root; find . -depth -print | cpio -dump %{buildroot})
-%{genfilelist} %{buildroot} \
-   --file /etc/ipsec.d/nsspassword 'attr(0600,root,root)' \
-  > %{name}-%{version}-filelist
+%{genfilelist} %{buildroot} | sed '
+\|^%{_sysconfdir}/sudoers.d/20_nethserver_ipsec$| d
+\|^%{_sysconfdir}/ipsec.d/nsspassword$| d
+' > %{name}-%{version}-filelist
 
 %files -f %{name}-%{version}-filelist
 %defattr(-,root,root)
 %doc COPYING
 %dir %{_nseventsdir}/%{name}-update
+%config %attr (0440,root,root) %{_sysconfdir}/sudoers.d/20_nethserver_ipsec
+%config %attr (0600,root,root) %{_sysconfdir}/ipsec.d/nsspassword
 
 %changelog
 * Fri Dec 04 2015 Davide Principi <davide.principi@nethesis.it> - 1.1.4-1
