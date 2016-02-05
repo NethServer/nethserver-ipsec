@@ -1,7 +1,0 @@
-#
-# 10include
-#
-
-# include /etc/ipsec.d/*.secrets
-
-

@@ -12,31 +12,19 @@
     $accountsDb = esmith::AccountsDB->open() || die("Could not open AccountsDB");
     $vpnsDb = esmith::ConfigDB->open("vpn") || die("Could not open VPN DB");
 
-    $conn = {
-	'%default' => {
-	    'type' => 'tunnel',
-	}
-    };
-
-    @localNetworks = ();
-
-    foreach ($networksDb->green()) {
-	push @localNetworks, esmith::util::computeLocalNetworkShortSpec(
-	    $_->prop('ipaddr'), 
-	    $_->prop('netmask')
-	    );
-    }
+    $conn = {};
 
 
     my $green = $networksDb->get_by_role('green');
 
+    # Default green subnet:
     $greenSubnet = esmith::util::computeLocalNetworkShortSpec(
 	$green->prop('ipaddr'),
 	$green->prop('netmask')
 	);
 
+    # Default green IP:
     $greenIp = $green->prop('ipaddr');
-
 
     '';
 }
