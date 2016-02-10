@@ -1,0 +1,8 @@
+        #
+        # 50rsa { $rsa = $ipsec{'KeyType'} eq 'rsa' ? '' : '#' }
+        #
+       {$rsa} leftid=@{ $ipsec{'KeyRsaName'} || join('.', $SystemName, $DomainName); }
+       {$rsa} leftrsasigkey=%cert
+       {$rsa} rightca=%same
+       {$rsa} rightrsasigkey=%cert
+
