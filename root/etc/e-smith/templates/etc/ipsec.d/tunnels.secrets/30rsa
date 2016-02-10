@@ -1,6 +1,5 @@
 #
 # 30rsa 
 #
-# temporary disable L2TP until new implementation (Refs NethServer/dev#5018)
-#{ $ipsec{'KeyType'} eq 'rsa' ? '' : '# ' }: RSA "{ $ipsec{'KeyRsaName'} || join('.', $SystemName, $DomainName); }"
+{ $ipsec{'KeyType'} eq 'rsa' ? '' : '# ' }: RSA "{ $ipsec{'KeyRsaName'} || join('.', $SystemName, $DomainName); }"
 
