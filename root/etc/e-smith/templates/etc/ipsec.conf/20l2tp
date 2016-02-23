@@ -10,14 +10,30 @@
         return '';
     }
 
+    my %defaults = ();
+
+    if($ipsec{'KeyType'} eq 'psk') {
+       $defaults{'authby'} = 'secret';
+       $defaults{'leftid'} = '@' . ( $ipsec{'AuthenticationId'} || join('.', $SystemName, $DomainName) );
+    } else {
+       my $certName = $ipsec{'KeyRsaName'} || join('.', $SystemName, $DomainName);
+       $defaults{'leftcert'} = $certName;
+       $defaults{'leftrsasigkey'} = '%cert';
+       $defaults{'leftid'} = '%fromcert';
+       $defaults{'authby'} = 'rsasig';
+    }
+
     # L2TP connections
     foreach ($ndb->red()) {
-        $conn->{'~L2TP'.$_->key} = {
+        $conn->{'~L2TP' . $_->key} = {
+            %defaults,
+
             'auto' => 'add',
             'pfs' => 'no',
+            'rekey' => 'no',
 
             'left' => '%'.$_->key,
-            'leftprotoport' => '17/%any',
+            'leftprotoport' => '17/1701',
 
             'right' => '%any',
             'rightprotoport' => '17/%any',
@@ -25,11 +41,11 @@
             'ikelifetime' => '8h',
             'keylife' => '1h',
 
-            'dpddelay' => '30',
-            'dpdtimeout' => '120',
+            'dpddelay' => '10',
+            'dpdtimeout' => '90',
             'dpdaction' => 'clear',
 
-        'type' => 'transport',
+            'type' => 'transport',
         };
     }
 
