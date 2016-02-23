@@ -2,8 +2,8 @@
     #
     # 00template_vars
     #
- 
-    use esmith::AccountsDB;   
+
+    use esmith::AccountsDB;
     use esmith::NetworksDB;
     use esmith::ConfigDB;
     use esmith::util;
@@ -13,16 +13,14 @@
     $vpnsDb = esmith::ConfigDB->open("vpn") || die("Could not open VPN DB");
 
     $conn = {
-	'%default' => {
-	    'type' => 'tunnel',
-	}
+
     };
 
     @localNetworks = ();
 
     foreach ($networksDb->green()) {
 	push @localNetworks, esmith::util::computeLocalNetworkShortSpec(
-	    $_->prop('ipaddr'), 
+	    $_->prop('ipaddr'),
 	    $_->prop('netmask')
 	    );
     }
